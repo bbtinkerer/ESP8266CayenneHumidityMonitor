@@ -15,11 +15,10 @@
 #define STARTUP_TEST_RETRY_DELAY 15000
 #define DEEP_SLEEP_TIME 1200000000 // 20minutes = 1200000000us
 
-#define ADC_REFERENCE 3.3 // Wemos D1 Mini has a 220k/100k voltage divider before A0, divides 3.3V to 1V
 #define ADC_SAMPLE_COUNT 10
 #define ADC_SAMPLE_DELAY 50
-#define RESISTOR1 270000
-#define RESISTOR2 320000 // Resistance from the Wemos D1 Mini divider before ADC
+#define RESISTOR1 490000 // 270k added to R1 (220k) of the voltage divider of the Wemos D1 Mini before the ADC
+#define RESISTOR2 100000 // R2 from the Wemos D1 Mini divider before ADC
 #define VOLTAGE_ERROR_CORRECTION 1.000 // set to 1 with debug on, find percentage voltage is off and update
 
 #define BUTTON_GPIO 5
@@ -47,7 +46,7 @@ void setup() {
   DEBUG_UTIL_PRINTLN("Starting...");
 
   // setup static IP as this cuts down on time trying to obtain an IP through DHCP
-  IPAddress espIP(192, 168, 1, 81);
+  IPAddress espIP(192, 168, 1, 80);
   IPAddress gateway(192, 168, 1, 1);
   IPAddress subnet(255, 255, 255, 0);
   WiFi.config(espIP, gateway, subnet);
@@ -105,7 +104,7 @@ void syncData(){
   // get average of analog reads, I would get weird really off values from time to time, probably better algorithms out there but this is good enough for me
   voltage = 0;
   for(int i = 0; i < ADC_SAMPLE_COUNT; i++){
-    voltage += (ADC_REFERENCE / 1023 * analogRead(A0)) * (RESISTOR1 + RESISTOR2) / RESISTOR2 * VOLTAGE_ERROR_CORRECTION;
+    voltage += analogRead(A0) / 1023.0 * (RESISTOR1 + RESISTOR2) / RESISTOR2 * VOLTAGE_ERROR_CORRECTION;
     delay(ADC_SAMPLE_DELAY);
   }
   voltage /= ADC_SAMPLE_COUNT;
