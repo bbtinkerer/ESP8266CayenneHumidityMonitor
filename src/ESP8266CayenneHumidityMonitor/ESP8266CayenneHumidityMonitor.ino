@@ -31,7 +31,7 @@ char wifiPassword[] = HOME_WIFI_PASSWORD;
 
 // Cayenne authentication info. This should be obtained from the Cayenne Dashboard.
 char username[] = CAYENNE_USERNAME;
-char password[] = CAYENNE_PASSOWORD;
+char password[] = CAYENNE_PASSWORD;
 char clientID[] = CAYENNE_CLIENT_ID_HATCHBOX_ABS;
 
 float humidity = 0;
